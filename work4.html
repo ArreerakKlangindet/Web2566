@@ -42,11 +42,10 @@
       class App extends React.Component {
         cardsOpened = [];
         title  = <div><b>Work4 :</b> เกมจับคู่ภาพ ด้วย ReactJS</div>;
-        footer = <div>By xxxxxxxxxx-x  xxxxxxxxxxxxx xxxxxxxxxxxxxx <br/> 
+        footer = <div>By 643021345-9  Arreerak klangindet <br/> 
            College of Computing, Khon Kaen University
           </div>;
-
-
+        
           constructor() {
           super();
           this.state = {
@@ -68,8 +67,6 @@
           this.cardsOpened = [];
           this.setState({ scene: 1, cards: this.shuffle(), cardsCount: 36 });
     }
-
-
     checkCard() {
           var a = this.cardsOpened[0];
           var b = this.cardsOpened[1];
@@ -113,8 +110,6 @@
             </div>
           );
         }
-
-
         imgClick = () => {
           var app = this.props.app;
           if (app.cardsOpened.length < 2) {
@@ -127,8 +122,6 @@
      };
 
       }
-
-     
       const container = document.getElementById('myapp');
       const root = ReactDOM.createRoot(container);
       root.render(<App />)
