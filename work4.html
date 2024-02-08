@@ -80,21 +80,7 @@
             this.setState({ page: 2 });
           }
       }
-      shuffle() {
-          var cards = [];
-          for (var i = 1; i <= 18; i++) {
-            cards.push(<Card t={i} app={this} />); // t คือ index ของภาพ
-            cards.push(<Card t={i} app={this} />); 
-          }
-          for (var i = 1; i < 100; i++) {
-            var a = Math.round(Math.random() * 35);
-            var b = Math.round(Math.random() * 35);
-            var t = cards[a];
-            cards[a] = cards[b];
-            cards[b] = t;
-          }
-          return cards;
-        }
+      
       }
       }
 
