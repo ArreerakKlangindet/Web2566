@@ -9,30 +9,130 @@
   <body>
     <div id="myapp" class="container p-4"></div>
     <script type="text/babel">
+      function MenuScene({app}) {
+        return (
+          <div>
+            <a href="index.html" className="btn btn-primary mx-2">
+              กลับหน้าหลัก
+            </a>
+            <button
+            className="btn btn-primary mx-2"
+            onClick={() => app.start()} 
+          > เริ่มเล่น </button>
+          </div>
+        );
+      }
+      function GameScene({ app }) {
+        return (
+          <div>
+            จำนวนภาพที่เหลือ {app.state.cardsCount} ใบ
+            <div className="row p-2">{app.state.cards}</div>
+            <button
+              className="btn btn-danger mx-2"
+              onClick={() => app.setState({ scene: 0 })}
+            >
+              เลิกเล่น
+            </button>
+          </div>
+        );
+      }
+
+
+
       class App extends React.Component {
+        cardsOpened = [];
         title  = <div><b>Work4 :</b> เกมจับคู่ภาพ ด้วย ReactJS</div>;
-        footer = <div>By 643021345-9  Arreerak Klangindet <br/> 
+        footer = <div>By xxxxxxxxxx-x  xxxxxxxxxxxxx xxxxxxxxxxxxxx <br/> 
            College of Computing, Khon Kaen University
           </div>;
 
 
           constructor() {
-            super();
+          super();
+          this.state = {
+            scene : 0,
+            cards : [],
           }
-          render() {
-            return (
-            <div className="card">
+        }
+        render() {
+          var sc = <MenuScene app={this}/>  
+          if(this.state.scene==1) sc = <GameScene app={this}/>  
+          if(this.state.scene==2) sc = <WinScene app={this}/>  
+          return <div className="card">
               <div className="card-header">{this.title} </div>
-              <div className="card-body"> </div>
-              <div className="card-footer">{this.footer} </div>
+              <div className="card-body"> {sc} </div>
+              <div className="card-footer"> {this.footer} </div>
             </div>
-           );
-      }       
+        }
+        start() {
+          this.cardsOpened = [];
+          this.setState({ scene: 1, cards: this.shuffle(), cardsCount: 36 });
+    }
 
 
+    checkCard() {
+          var a = this.cardsOpened[0];
+          var b = this.cardsOpened[1];
+          this.cardsOpened = [];
+          if (a.props.t == b.props.t) {
+            a.setState({ s: 2 });
+            b.setState({ s: 2 });
+            this.setState({ cardsCount: this.state.cardsCount-2 });
+          } else {
+            a.setState({ s: 0 });
+            b.setState({ s: 0 });
+          }
+          if (this.cardsCount == 0) {
+            this.setState({ page: 2 });
+          }
+      }
+
+      }
+
+      class Card extends React.Component {
+        state = { s: 0 };
+        render() {
+          var img = (
+            <img
+              src="work1/0.jpg"
+              width="100%"
+              onClick={() => this.imgClick()}
+            />
+          );
+          if (this.state.s==1) {
+            img = <img src={"work1/" + this.props.t + ".jpg"} width="100%" />;
+          }
+          if (this.state.s==2) {
+            img = <div/>;  // บัตรภาพถูกลบออก ไม่ต้องแสดงภาพ
+          }
+          return (
+            <div className="col-2">
+              {img}
+              <br />
+              t={this.props.t} s={this.state.s}
+            </div>
+          );
+        }
+
+
+        imgClick = () => {
+          var app = this.props.app;
+          if (app.cardsOpened.length < 2) {
+            app.cardsOpened.push(this);
+            this.setState({ s: 1 });
+            if(app.cardsOpened.length == 2){
+              setTimeout( ()=>app.checkCard(),2000);
+            }
+          }
+     };
+
+      }
+
+     
       const container = document.getElementById('myapp');
       const root = ReactDOM.createRoot(container);
       root.render(<App />)
     </script>
+
   </body>
 </html>
